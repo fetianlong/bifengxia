@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.KeyWordsDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.KeyWords" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="c_name" property="cName" jdbcType="VARCHAR" />
+    <result column="p_name" property="pName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, c_name, p_name, status, remark, create_user, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_key_word
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectKeyWordsBykeyword" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_key_word where status=1
+<!--     where c_name like CONCAT('%','${keyword}','%' ) or p_name like CONCAT('%','${keyword}','%' ) -->
+  </select>
+ 
+  <select id="selectKeyWordsLimit" parameterType="MyPage" resultMap="BaseResultMap">
+	  select 
+	  <include refid="Base_Column_List" />
+    from t_key_word
+    <where>
+    	<if test="params.cName != null and params.cName != '' ">
+    	c_name like #{params.cName}
+    	</if>
+    	<if test="params.pName != null and params.pName != '' ">
+    	p_name like #{params.pName}
+    	</if>
+    	<if test="params.status != null and params.status != '' ">
+    	status = #{params.status}
+    	</if>
+    </where>
+  </select>
+    <update id="shutdownUserInfoById" parameterType="java.lang.Long" >
+    	UPDATE userinfo SET
+		remark = 0
+		WHERE ID = #{id}
+	</update>
+
+</mapper>

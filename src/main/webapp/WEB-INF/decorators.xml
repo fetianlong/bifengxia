@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/layouts/">
+	<excludes>
+		<pattern>/static/*</pattern>
+<!-- 		<pattern>/login**</pattern> -->
+<!-- 		<pattern>/review**</pattern> -->
+<!-- 		<pattern>/registUser**</pattern> -->
+<!-- 		<pattern>/kf**</pattern> -->
+<!-- 		<pattern>/app_down.jsp</pattern> -->
+<!-- 		<pattern>/adman.jsp</pattern> -->
+	</excludes>
+	
+	<decorator name="default"  page="default.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+	<decorator name="getheader"  page="getheader.jsp">
+		<pattern>/login**</pattern>
+		<pattern>/registUser**</pattern>
+		<pattern>/order/paySuccess/**</pattern>
+	</decorator>
+	<!-- <decorator name="getheader"  page="login.jsp">
+		<pattern>/registUser**</pattern>
+	</decorator> -->
+</decorators>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.CommodityPriceDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.CommodityPrice" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="com_id" property="comId" jdbcType="BIGINT" />
+    <result column="old_price" property="oldPrice" jdbcType="DECIMAL" />
+    <result column="new_price" property="newPrice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, com_id, old_price, new_price,ticket_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from commodity_price
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectPriceBycomId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from commodity_price
+    where com_id = #{comId,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from commodity_price
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.chatm.search.model.CommodityPrice" >
+    insert into commodity_price (id, name, com_id, 
+      old_price, new_price)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{comId,jdbcType=BIGINT}, 
+      #{oldPrice,jdbcType=DECIMAL}, #{newPrice,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chatm.search.model.CommodityPrice" >
+    insert into commodity_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="comId != null" >
+        com_id,
+      </if>
+      <if test="oldPrice != null" >
+        old_price,
+      </if>
+      <if test="newPrice != null" >
+        new_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="comId != null" >
+        #{comId,jdbcType=BIGINT},
+      </if>
+      <if test="oldPrice != null" >
+        #{oldPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newPrice != null" >
+        #{newPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chatm.search.model.CommodityPrice" >
+    update commodity_price
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="comId != null" >
+        com_id = #{comId,jdbcType=BIGINT},
+      </if>
+      <if test="oldPrice != null" >
+        old_price = #{oldPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newPrice != null" >
+        new_price = #{newPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chatm.search.model.CommodityPrice" >
+    update commodity_price
+    set name = #{name,jdbcType=VARCHAR},
+      com_id = #{comId,jdbcType=BIGINT},
+      old_price = #{oldPrice,jdbcType=DECIMAL},
+      new_price = #{newPrice,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

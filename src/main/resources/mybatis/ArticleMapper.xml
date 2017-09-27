@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.ArticleDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.Article" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="programa_id" property="programaId" jdbcType="BIGINT" />
+    <result column="key_word" property="keyWord" jdbcType="VARCHAR" />
+    <result column="artiReource" property="artiReource" jdbcType="VARCHAR" />
+    <result column="abstract_text" property="abstractText" jdbcType="VARCHAR" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="void_url" property="voidUrl" jdbcType="VARCHAR" />
+    <result column="is_vote" property="isVote" jdbcType="INTEGER" />
+    <result column="is_tuijian" property="isTuijian" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="release_type" property="releaseType" jdbcType="INTEGER" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.chatm.search.model.Article" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, programa_id, key_word, abstract_text, pic_url, void_url, is_vote, release_type, 
+    release_time, create_user, create_date,is_tuijian,artiReource,status
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where id = #{id,jdbcType=BIGINT} and status = 1
+  </select>
+  
+  <select id="checkExistByArticleTitle" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where title = #{title,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectArticleByPid" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+   select 
+     a.id, a.title, a.programa_id, a.create_date
+    from article a
+    <where>
+    	a.status=1 and a.programa_id = #{programaId}
+    </where>
+  </select>
+  
+  <select id="selectArticleLimit" parameterType="MyPage" resultMap="ResultMapWithBLOBs">
+   select 
+     a.id, a.title, a.programa_id, a.key_word, a.abstract_text, a.pic_url, a.void_url, a.is_vote, a.release_type, 
+    a.release_time, a.create_user, a.create_date,a.is_tuijian,a.status,a.artiReource
+    ,a.content,p.name,p.remark as purl
+    from article a,programa p
+    <where>
+    	a.programa_id = p.id and a.status=1
+    	<if test="params.programaId != null and params.programaId != '' ">
+    		and a.programa_id = #{params.programaId}
+    	</if>
+    	<if test="params.titleName != null and params.titleName != '' ">
+    		and a.title like #{params.titleName}
+    	</if>
+    	<if test="params.keywords != null and params.keywords != '' ">
+    		and (
+    		a.key_word like #{params.keywords} 
+    		or a.abstract_text like #{params.keywords} 
+    		or a.content like #{params.keywords}
+    		)
+    	</if>
+    	<if test="params.status != null and params.status != '' ">
+    		and a.status = #{params.status}
+    	</if>
+    	<if test="params.isTuijian != null and params.isTuijian != '' ">
+    		and a.is_tuijian = #{params.isTuijian}
+    	</if>
+    	order by a.create_date desc
+    </where>
+  </select>
+</mapper>

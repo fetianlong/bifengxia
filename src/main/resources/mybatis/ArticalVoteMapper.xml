@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.ArticleVoteDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.ArticleVote" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="artical_id" property="articleId" jdbcType="BIGINT" />
+    <result column="chooseName" property="chooseName" jdbcType="VARCHAR" />
+    <result column="choose_A_name" property="chooseAName" jdbcType="VARCHAR" />
+    <result column="choose_A_num" property="chooseANum" jdbcType="INTEGER" />
+    <result column="choose_B_name" property="chooseBName" jdbcType="VARCHAR" />
+    <result column="choose_B_num" property="chooseBNum" jdbcType="INTEGER" />
+    <result column="choose_C_name" property="chooseCName" jdbcType="VARCHAR" />
+    <result column="choose_C_num" property="chooseCNum" jdbcType="INTEGER" />
+    <result column="choose_D_name" property="chooseDName" jdbcType="VARCHAR" />
+    <result column="choose_D_num" property="chooseDNum" jdbcType="INTEGER" />
+    <result column="choose_E_name" property="chooseEName" jdbcType="VARCHAR" />
+    <result column="choose_E_num" property="chooseENum" jdbcType="INTEGER" />
+    <result column="choose_F_name" property="chooseFName" jdbcType="VARCHAR" />
+    <result column="choose_F_num" property="chooseFNum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, artical_id, chooseName, choose_A_name, choose_A_num, choose_B_name, choose_B_num, choose_C_name, 
+    choose_C_num, choose_D_name, choose_D_num, choose_E_name, choose_E_num, choose_F_name, 
+    choose_F_num
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from artical_vote
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectArticleVoteByarId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from artical_vote
+    where artical_id = #{articalId,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateArticleVoteBySelective" parameterType="com.chatm.search.model.ArticleVote" >
+    update artical_vote
+    <set >
+      <if test="chooseAName != null" >
+        choose_A_name = #{chooseAName,jdbcType=VARCHAR},
+      </if>
+      <if test="chooseANum != null" >
+        choose_A_num = #{chooseANum,jdbcType=INTEGER},
+      </if>
+      <if test="chooseBName != null" >
+        choose_B_name = #{chooseBName,jdbcType=VARCHAR},
+      </if>
+      <if test="chooseBNum != null" >
+        choose_B_num = #{chooseBNum,jdbcType=INTEGER},
+      </if>
+      <if test="chooseCName != null" >
+        choose_C_name = #{chooseCName,jdbcType=VARCHAR},
+      </if>
+      <if test="chooseCNum != null" >
+        choose_C_num = #{chooseCNum,jdbcType=INTEGER},
+      </if>
+      <if test="chooseDName != null" >
+        choose_D_name = #{chooseDName,jdbcType=VARCHAR},
+      </if>
+      <if test="chooseDNum != null" >
+        choose_D_num = #{chooseDNum,jdbcType=INTEGER},
+      </if>
+      <if test="chooseEName != null" >
+        choose_E_name = #{chooseEName,jdbcType=VARCHAR},
+      </if>
+      <if test="chooseENum != null" >
+        choose_E_num = #{chooseENum,jdbcType=INTEGER},
+      </if>
+      <if test="chooseFName != null" >
+        choose_F_name = #{chooseFName,jdbcType=VARCHAR},
+      </if>
+      <if test="chooseFNum != null" >
+        choose_F_num = #{chooseFNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

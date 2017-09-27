@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.CommodityDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.Commodity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="commodity_code" property="commodityCode" jdbcType="VARCHAR" />
+    <result column="commodity_type" property="commodityType" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="old_price" property="oldPrice" jdbcType="DECIMAL" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, commodity_code, commodity_type, name, old_price, price, status, pic_url, remark, introduction, create_user, 
+    create_date
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from commodity
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectCommodityLimit" resultType="com.chatm.search.model.Commodity" parameterType="MyPage">
+    select   
+     <include refid="Base_Column_List" />
+    from commodity
+    <where>
+    	<if test="params.name != null and params.name != '' ">
+	    		and name = #{params.name}
+	      </if>
+	      <if test="params.commodityt != null and params.commodityt != '' ">
+	    		and commodity_type = #{params.commodityt}
+	      </if>
+	      <if test="params.commodityCode != null and params.commodityCode != '' ">
+	    		and commodity_code = #{params.commodityCode}
+	      </if>
+    </where>
+  </select>
+  
+  <select id="selectCommodityByType" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from commodity
+    where commodity_type = #{commodityType,jdbcType=BIGINT}
+<!--     where status = 0 and commodity_type = #{commodityType,jdbcType=BIGINT} -->
+  </select>
+  
+</mapper>

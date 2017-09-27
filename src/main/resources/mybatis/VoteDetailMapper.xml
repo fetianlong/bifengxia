@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.VoteDetailDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.VoteDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="vote_id" property="voteId" jdbcType="BIGINT" />
+    <result column="vote_choose" property="voteChoose" jdbcType="VARCHAR" />
+    <result column="vote_ip" property="voteIp" jdbcType="VARCHAR" />
+    <result column="vote_area" property="voteArea" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, vote_id, vote_choose, vote_ip, vote_area
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from vote_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByVoteId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vote_detail
+    where vote_id = #{voteId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByVote" parameterType="com.chatm.search.model.VoteDetail" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vote_detail
+    <where>
+    	<if test="voteId != null">
+    		and vote_id = #{voteId,jdbcType=BIGINT}
+    	</if>
+    	<if test="voteIp != null">
+    		and vote_ip = #{voteIp,jdbcType=BIGINT}
+    	</if>
+    	<if test="voteChoose != null">
+    		and vote_choose = #{voteChoose,jdbcType=BIGINT}
+    	</if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from vote_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.chatm.search.model.VoteDetail" >
+    insert into vote_detail (id, vote_id, vote_choose, 
+      vote_ip, vote_area)
+    values (#{id,jdbcType=BIGINT}, #{voteId,jdbcType=BIGINT}, #{voteChoose,jdbcType=VARCHAR}, 
+      #{voteIp,jdbcType=VARCHAR}, #{voteArea,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chatm.search.model.VoteDetail" >
+    insert into vote_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="voteId != null" >
+        vote_id,
+      </if>
+      <if test="voteChoose != null" >
+        vote_choose,
+      </if>
+      <if test="voteIp != null" >
+        vote_ip,
+      </if>
+      <if test="voteArea != null" >
+        vote_area,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="voteId != null" >
+        #{voteId,jdbcType=BIGINT},
+      </if>
+      <if test="voteChoose != null" >
+        #{voteChoose,jdbcType=VARCHAR},
+      </if>
+      <if test="voteIp != null" >
+        #{voteIp,jdbcType=VARCHAR},
+      </if>
+      <if test="voteArea != null" >
+        #{voteArea,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chatm.search.model.VoteDetail" >
+    update vote_detail
+    <set >
+      <if test="voteId != null" >
+        vote_id = #{voteId,jdbcType=BIGINT},
+      </if>
+      <if test="voteChoose != null" >
+        vote_choose = #{voteChoose,jdbcType=VARCHAR},
+      </if>
+      <if test="voteIp != null" >
+        vote_ip = #{voteIp,jdbcType=VARCHAR},
+      </if>
+      <if test="voteArea != null" >
+        vote_area = #{voteArea,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chatm.search.model.VoteDetail" >
+    update vote_detail
+    set vote_id = #{voteId,jdbcType=BIGINT},
+      vote_choose = #{voteChoose,jdbcType=VARCHAR},
+      vote_ip = #{voteIp,jdbcType=VARCHAR},
+      vote_area = #{voteArea,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

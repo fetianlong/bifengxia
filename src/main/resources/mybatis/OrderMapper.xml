@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.OrderDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.Order" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="pay_order_id" property="payOrderId" jdbcType="VARCHAR" />
+    <result column="pay_commodity_id" property="payCommodityId" jdbcType="BIGINT" />
+    <result column="com_pid" property="comPid" jdbcType="BIGINT" />
+    <result column="commodity_name" property="commodityName" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="INTEGER" />
+    <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+    <result column="pay_user" property="payUser" jdbcType="BIGINT" />
+    <result column="pay_user_name" property="payUserName" jdbcType="VARCHAR" />
+    <result column="pay_card_no" property="payCardNo" jdbcType="VARCHAR" />
+    <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
+    <result column="p_count" property="pCount" jdbcType="BIGINT" />
+    <result column="s_price" property="sPrice" jdbcType="DECIMAL" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="tickets_flag" property="ticketsFlag" jdbcType="INTEGER" />
+    <result column="message_flag" property="message_flag" jdbcType="INTEGER" />
+    <result column="send_ticket_flag" property="send_ticket_flag" jdbcType="INTEGER" />
+    <result column="tickets_name" property="ticketsName" jdbcType="VARCHAR" />
+    <result column="tickets_phone" property="ticketsPhone" jdbcType="VARCHAR" />
+    <result column="tickets_no" property="ticketsNo" jdbcType="VARCHAR" />
+    <result column="play_time" property="playTime" jdbcType="TIMESTAMP" />
+    <result column="trade_no" property="trade_no" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, pay_order_id, pay_commodity_id, com_pid, commodity_name, pay_type, pay_date, pay_user, 
+    pay_user_name, pay_card_no, user_phone, p_count, s_price, price, status, tickets_name, 
+    tickets_phone, play_time,tickets_no,tickets_flag,message_flag,send_ticket_flag,trade_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+<!--   根据订单ID获取订单信息 -->
+  <select id="selectByOrderByPayorderId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    o.id, o.pay_order_id, o.pay_commodity_id, o.com_pid, o.commodity_name, o.pay_type, o.pay_date, o.pay_user, 
+    o.pay_user_name, o.pay_card_no, o.user_phone, o.p_count, o.s_price, o.price, o.status, o.tickets_name, 
+    o.tickets_phone, o.play_time, c.commodity_type as ctype,o.tickets_no,o.tickets_flag,o.message_flag,o.send_ticket_flag
+    from order_info o,commodity c
+    where o.pay_order_id = #{payOrderId,jdbcType=VARCHAR} and o.pay_commodity_id = c.id
+  </select>
+  
+<!--   根据取票码获取订单信息 -->
+  <select id="selectByOrderByTicketNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+<!--     id, user_phone, status, play_time, p_count -->
+    from order_info
+    where tickets_no = #{ticketsNo,jdbcType=VARCHAR} and status = 2
+  </select>
+  
+  <select id="selectOrderByOrder" resultMap="BaseResultMap" parameterType="com.chatm.search.model.Order" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where status=1
+    <if test="payCommodityId != null">
+    	and pay_commodity_id = #{payCommodityId,jdbcType=BIGINT}
+    </if>
+    <if test="payUser != null">
+    	and pay_user = #{payUser,jdbcType=BIGINT}
+    </if>
+    <if test="comPid != null">
+    	and com_pid=#{comPid}
+    </if>
+  </select>
+  
+  
+  <select id="selectListOrderByOrder" resultMap="BaseResultMap" parameterType="com.chatm.search.model.Order" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where status = 2
+    <if test="message_flag != null">
+    	and message_flag = #{message_flag,jdbcType=INTEGER}
+    </if>
+    <if test="send_ticket_flag != null">
+    	and send_ticket_flag = #{send_ticket_flag,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  <!--   根据用户Id获取订单列表 -->
+  <select id="getOrderListByUser" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where pay_user = #{payUser,jdbcType=BIGINT} order by
+    id desc
+    <!--pay_date desc-->
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from order_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.chatm.search.model.Order"  useGeneratedKeys="true" keyProperty="id">
+    insert into order_info (id, pay_order_id, pay_commodity_id, com_pid,
+      commodity_name, pay_type, pay_date, 
+      pay_user, pay_user_name, pay_card_no, 
+      user_phone, p_count, s_price, 
+      price, status, tickets_name, 
+      tickets_phone, play_time,trade_no)
+    values (#{id,jdbcType=BIGINT}, #{payOrderId,jdbcType=VARCHAR}, #{payCommodityId,jdbcType=BIGINT}, #{comPid,jdbcType=BIGINT}, 
+      #{commodityName,jdbcType=VARCHAR}, #{payType,jdbcType=INTEGER}, #{payDate,jdbcType=DATE}, 
+      #{payUser,jdbcType=BIGINT}, #{payUserName,jdbcType=VARCHAR}, #{payCardNo,jdbcType=VARCHAR}, 
+      #{userPhone,jdbcType=VARCHAR}, #{pCount,jdbcType=BIGINT}, #{sPrice,jdbcType=DECIMAL}, 
+      #{price,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{ticketsName,jdbcType=VARCHAR}, 
+      #{ticketsPhone,jdbcType=VARCHAR}, #{playTime,jdbcType=TIMESTAMP}, #{trade_no,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chatm.search.model.Order"  useGeneratedKeys="true" keyProperty="id">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="payOrderId != null" >
+        pay_order_id,
+      </if>
+      <if test="payCommodityId != null" >
+        pay_commodity_id,
+      </if>
+      <if test="comPid != null" >
+        com_pid,
+      </if>
+      <if test="commodityName != null" >
+        commodity_name,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="payDate != null" >
+        pay_date,
+      </if>
+      <if test="payUser != null" >
+        pay_user,
+      </if>
+      <if test="payUserName != null" >
+        pay_user_name,
+      </if>
+      <if test="payCardNo != null" >
+        pay_card_no,
+      </if>
+      <if test="userPhone != null" >
+        user_phone,
+      </if>
+      <if test="pCount != null" >
+        p_count,
+      </if>
+      <if test="sPrice != null" >
+        s_price,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="ticketsName != null" >
+        tickets_name,
+      </if>
+      <if test="ticketsPhone != null" >
+        tickets_phone,
+      </if>
+      <if test="playTime != null" >
+        play_time,
+      </if>
+      <if test="trade_no != null" >
+        trade_no,
+      </if>
+      <if test="ticketsNo != null" >
+        tickets_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="payOrderId != null" >
+        #{payOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="payCommodityId != null" >
+        #{payCommodityId,jdbcType=BIGINT},
+      </if>
+      <if test="comPid != null" >
+        #{comPid,jdbcType=BIGINT},
+      </if>
+      <if test="commodityName != null" >
+        #{commodityName,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payDate != null" >
+        #{payDate,jdbcType=DATE},
+      </if>
+      <if test="payUser != null" >
+        #{payUser,jdbcType=BIGINT},
+      </if>
+      <if test="payUserName != null" >
+        #{payUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="payCardNo != null" >
+        #{payCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="pCount != null" >
+        #{pCount,jdbcType=BIGINT},
+      </if>
+      <if test="sPrice != null" >
+        #{sPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="ticketsName != null" >
+        #{ticketsName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketsPhone != null" >
+        #{ticketsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="playTime != null" >
+        #{playTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trade_no != null" >
+        #{trade_no,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketsNo != null" >
+        #{ticketsNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chatm.search.model.Order" >
+    update order_info
+    <set >
+      <if test="payOrderId != null" >
+        pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="payCommodityId != null" >
+        pay_commodity_id = #{payCommodityId,jdbcType=BIGINT},
+      </if>
+      <if test="comPid != null" >
+        com_pid = #{comPid,jdbcType=BIGINT},
+      </if>
+      <if test="commodityName != null" >
+        commodity_name = #{commodityName,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payUser != null" >
+        pay_user = #{payUser,jdbcType=BIGINT},
+      </if>
+      <if test="payUserName != null" >
+        pay_user_name = #{payUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="payCardNo != null" >
+        pay_card_no = #{payCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="pCount != null" >
+        p_count = #{pCount,jdbcType=BIGINT},
+      </if>
+      <if test="sPrice != null" >
+        s_price = #{sPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="message_flag != null" >
+        message_flag = #{message_flag,jdbcType=INTEGER},
+      </if>
+      <if test="send_ticket_flag != null" >
+        send_ticket_flag = #{send_ticket_flag,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="ticketsFlag != null" >
+        tickets_flag = #{ticketsFlag,jdbcType=INTEGER},
+      </if>
+      <if test="ticketsName != null" >
+        tickets_name = #{ticketsName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketsPhone != null" >
+        tickets_phone = #{ticketsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketsNo != null" >
+        tickets_no = #{ticketsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_no != null" >
+        trade_no = #{trade_no,jdbcType=VARCHAR},
+      </if>
+      <if test="playTime != null" >
+        play_time = #{playTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateOrderByPayorderId" parameterType="com.chatm.search.model.Order" >
+    update order_info
+    <set >
+      <if test="payCommodityId != null" >
+        pay_commodity_id = #{payCommodityId,jdbcType=BIGINT},
+      </if>
+      <if test="comPid != null" >
+        com_pid = #{comPid,jdbcType=BIGINT},
+      </if>
+      <if test="commodityName != null" >
+        commodity_name = #{commodityName,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payUser != null" >
+        pay_user = #{payUser,jdbcType=BIGINT},
+      </if>
+      <if test="payUserName != null" >
+        pay_user_name = #{payUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="payCardNo != null" >
+        pay_card_no = #{payCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="pCount != null" >
+        p_count = #{pCount,jdbcType=BIGINT},
+      </if>
+      <if test="sPrice != null" >
+        s_price = #{sPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="message_flag != null" >
+        message_flag = #{message_flag,jdbcType=INTEGER},
+      </if>
+      <if test="send_ticket_flag != null" >
+        send_ticket_flag = #{send_ticket_flag,jdbcType=INTEGER},
+      </if>
+      <if test="ticketsFlag != null" >
+        tickets_flag = #{ticketsFlag,jdbcType=INTEGER},
+      </if>
+      <if test="ticketsName != null" >
+        tickets_name = #{ticketsName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketsPhone != null" >
+        tickets_phone = #{ticketsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketsNo != null" >
+        tickets_no = #{ticketsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trade_no != null" >
+        trade_no = #{trade_no,jdbcType=VARCHAR},
+      </if>
+      <if test="playTime != null" >
+        play_time = #{playTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pay_order_id = #{payOrderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chatm.search.model.Order" >
+    update order_info
+    set pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+      pay_commodity_id = #{payCommodityId,jdbcType=BIGINT},
+      com_pid = #{comPid,jdbcType=BIGINT},
+      commodity_name = #{commodityName,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=INTEGER},
+      pay_date = #{payDate,jdbcType=TIMESTAMP},
+      pay_user = #{payUser,jdbcType=BIGINT},
+      pay_user_name = #{payUserName,jdbcType=VARCHAR},
+      pay_card_no = #{payCardNo,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      p_count = #{pCount,jdbcType=BIGINT},
+      s_price = #{sPrice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      tickets_name = #{ticketsName,jdbcType=VARCHAR},
+      tickets_phone = #{ticketsPhone,jdbcType=VARCHAR},
+      trade_no = #{trade_no,jdbcType=VARCHAR},
+      play_time = #{playTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

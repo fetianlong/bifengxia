@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chatm.search.dao.UserInfoDao">
+	<resultMap type="userInfo" id="userInfoResult">
+		<result property="id" column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="userName" column="userName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="pwd" column="pwd" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="salt" column="salt" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="state" column="state" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="email" column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="roleCategory" column="roleCategory" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="franchiseesId" column="Franchisees_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="maces" column="maces" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="isDeleteFlag" column="isDeleteFlag" jdbcType="BIT" javaType="java.lang.Boolean"/>
+		<result property="createrId" column="createrId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="createrName" column="createrName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="createDateTime" column="createDateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		
+		<result column="RealName" property="realname" jdbcType="VARCHAR" />
+	    <result column="Birthdate" property="birthdate" jdbcType="VARCHAR" />
+	    <result column="IDNumber" property="idnumber" jdbcType="VARCHAR" />
+	    <result column="sex" property="sex" jdbcType="INTEGER" />
+	    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+	    <result property="resetPwdFlag" column="resetPwdFlag" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	</resultMap>
+	
+	
+	<sql id="Base_Column_List" >
+	  ID, UserName, Email, State, Pwd, IsDeleteFlag, CreaterId, CreaterName, CreateDateTime, 
+	  RoleCategory, Franchisees_ID, UserType, salt, maces, RealName, Birthdate, IDNumber, 
+	  sex, telephone, remark, resetPwdFlag
+	</sql>
+	
+	<select id="selectUserInfoByEmail" parameterType="String" resultMap="userInfoResult">
+	    select 
+	    <include refid="Base_Column_List"></include>
+	    from userinfo   
+	    where id = 1 and remark=1
+	</select>
+	
+	<update id="startUserInfoById" parameterType="java.lang.Long" >
+    	UPDATE userinfo SET
+		remark = 1
+		WHERE ID = #{id}
+	</update>
+</mapper>

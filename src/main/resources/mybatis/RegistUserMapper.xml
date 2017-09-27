@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.RegistUserDao" >
+  <resultMap id="BaseResultMap" type="com.chatm.search.model.RegistUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="regist_type" property="registType" jdbcType="INTEGER" />
+    <result column="unique_key" property="uniqueKey" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="regist_time" property="registTime" jdbcType="DATE" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="headpicture" property="headpicture" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_name, phone, password, regist_type, unique_key, salt, regist_time, real_name, 
+    address, sex, age, birthday, headpicture,email
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from regist_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUniqueKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from regist_user
+    where unique_key = #{uniqueKey,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from regist_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.chatm.search.model.RegistUser" >
+    insert into regist_user (id, user_name, phone, 
+      password, regist_type, unique_key, 
+      salt, regist_time, real_name, 
+      address, sex, age, email,
+      birthday, headpicture)
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{registType,jdbcType=INTEGER}, #{uniqueKey,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{registTime,jdbcType=DATE}, #{realName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{age,jdbcType=INTEGER}, #{email}
+      #{birthday,jdbcType=DATE}, #{headpicture,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chatm.search.model.RegistUser" >
+    insert into regist_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="registType != null" >
+        regist_type,
+      </if>
+      <if test="uniqueKey != null" >
+        unique_key,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+      <if test="registTime != null" >
+        regist_time,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="headpicture != null" >
+        headpicture,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="registType != null" >
+        #{registType,jdbcType=INTEGER},
+      </if>
+      <if test="uniqueKey != null" >
+        #{uniqueKey,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="registTime != null" >
+        #{registTime,jdbcType=DATE},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="headpicture != null" >
+        #{headpicture,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chatm.search.model.RegistUser" >
+    update regist_user
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="registType != null" >
+        regist_type = #{registType,jdbcType=INTEGER},
+      </if>
+      <if test="uniqueKey != null" >
+        unique_key = #{uniqueKey,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="registTime != null" >
+        regist_time = #{registTime,jdbcType=DATE},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="headpicture != null" >
+        headpicture = #{headpicture,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chatm.search.model.RegistUser" >
+    update regist_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      regist_type = #{registType,jdbcType=INTEGER},
+      unique_key = #{uniqueKey,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      regist_time = #{registTime,jdbcType=DATE},
+      real_name = #{realName,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      headpicture = #{headpicture,jdbcType=VARCHAR}
+      email = #{email,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+    <select id="selectRegistUserByUserName" parameterType="String" resultMap="BaseResultMap">
+  	 select 
+	    <include refid="Base_Column_List"></include>
+	    from regist_user   
+	    where   
+	        user_name = #{userName}
+  </select>
+  
+  <select id="selectRegistUserByMobile" parameterType="String" resultMap="BaseResultMap">
+  	 select 
+	    <include refid="Base_Column_List"></include>
+	    from regist_user   
+	    where   
+	        phone = #{phone}
+  </select>
+  
+  <select id="selectRegistUserByEmail" parameterType="String" resultMap="BaseResultMap">
+  	 select 
+	    <include refid="Base_Column_List"></include>
+	    from regist_user   
+	    where   
+	        email = #{email}
+  </select>
+  
+  
+   <select id="EmailById" parameterType="String" resultType="java.lang.String">
+  	 select 
+	       email
+	    from regist_user   
+	    where   
+	       id = #{user_id}
+  </select>
+</mapper>

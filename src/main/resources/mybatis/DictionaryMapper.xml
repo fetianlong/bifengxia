@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatm.search.dao.DictionaryDao" >
+  <resultMap id="DictionaryResultMap" type="com.chatm.search.model.Dictionary" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code_value" property="codeValue" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="parent_code" property="parentCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="isFlag" property="isflag" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Dictionary_Column_List" >
+    id, code, name, content, parent_code, create_time, create_user_id, update_time, isFlag,remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="DictionaryResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Dictionary_Column_List" />
+    from dictionary
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from dictionary
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <select id="selectDictionaryLimit"  resultMap="DictionaryResultMap">
+        SELECT *
+        FROM dictionary t
+        where isFlag=1
+		<if test="params.code != null">
+			and t.code = #{params.code}
+		</if>
+		<if test="params.isflag != null">
+			and t.isflag = #{params.isflag}
+		</if>       
+		<if test="params.parentCode != null">
+			and t.parent_code = #{params.parentCode}
+		</if>       
+		<if test="params.titleName != null">
+			and t.name like #{params.titleName}
+		</if>       
+		<if test="params.programaId != null">
+			and t.parent_code = #{params.programaId}
+		</if>       
+    </select>
+    
+    <select id="getDictionary" parameterType="com.chatm.search.model.Dictionary"  resultMap="DictionaryResultMap">
+        SELECT *
+        FROM dictionary t
+        where isFlag=1
+		<if test="code != null">
+			and t.code = #{code}
+		</if>
+		<if test="codeValue != null">
+			and t.code_value = #{codeValue}
+		</if>       
+		<if test="parentCode != null">
+			and t.parent_code = #{parentCode}
+		</if>       
+    </select>
+    
+    <select id="getListDictionary" parameterType="com.chatm.search.model.Dictionary"  resultMap="DictionaryResultMap">
+        SELECT *
+        FROM dictionary t
+        where  isFlag=1
+		<if test="code != null">
+			and t.code = #{code}
+		</if>
+		<if test="codeValue != null">
+			and t.code_value = #{codeValue}
+		</if>       
+		<if test="parentCode != null">
+			and t.parent_code = #{parentCode}
+		</if>       
+    </select>
+    
+    <select id="getDictionaryByCode" parameterType="String" resultMap="DictionaryResultMap">
+    	select * from dictionary t
+    	where isFlag=1
+			and t.code = #{code}
+    </select>
+    
+    <select id="getDictionaryById" parameterType="Long" resultMap="DictionaryResultMap">
+    	select * from dictionary t
+    	where t.id = #{id}
+    </select>
+    
+    <select id="getParentDictionary" parameterType="String" resultMap="DictionaryResultMap">
+    	select * from dictionary d where d.parent_code is NULL
+    </select>
+    <select id="selectSame" parameterType="String" resultMap="DictionaryResultMap">
+    	select * from dictionary d where d.parent_code = #{parentCode} and name = #{name} and isFlag=1
+    </select>
+</mapper>
