@@ -84,8 +84,8 @@ public class TicktetUtil {
 //						+ "<quantity>" + order.getpCount() + "</quantity>"
 						+ "<totalPrice>" + order.getPrice() + "</totalPrice>"
 						+ "<occDate>" + sdf.format(order.getPlayTime()) + "</occDate>"
-//						+ "<goodsCode>" + order.getTicketId() + "</goodsCode>"	// 必填商品编码，同票型编码
-						+ "<goodsCode>PST20170307097873</goodsCode>"	// 必填商品编码，同票型编码
+						+ "<goodsCode>" + order.getTicketId() + "</goodsCode>"	// 必填商品编码，同票型编码
+//						+ "<goodsCode>PST20170307097873</goodsCode>"	// 必填商品编码，同票型编码
 						+ "<goodsName>" + order.getCommodityName() + "</goodsName>"
 						+ "</ticketOrder>"
 						;
